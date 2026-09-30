@@ -30,22 +30,28 @@ document.addEventListener("DOMContentLoaded", () => {
             <h5>Participants</h5>
             <ul class="participants-list">
               ${details.participants
-                .map(
-                  (email) => `
+                .map((email) => {
+                  const escapedEmail = email
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll('"', "&quot;")
+                    .replaceAll("'", "&#39;");
+                  return `
                     <li>
-                      <span>${email}</span>
+                      <span>${escapedEmail}</span>
                       <button
                         type="button"
                         class="remove-participant"
                         data-activity="${encodeURIComponent(name)}"
                         data-email="${encodeURIComponent(email)}"
-                        aria-label="Remove ${email}"
+                        aria-label="Remove ${escapedEmail}"
                         title="Remove participant"
                       >
                         &#128465;
                       </button>
-                    </li>`
-                )
+                    </li>`;
+                })
                 .join("")}
             </ul>
           </div>
